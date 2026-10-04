@@ -5,7 +5,7 @@
   "project_id": "appgprj_6ac1b4fe606c81918b2290f4ce280229",
   "site_version": 3,
   "version_id": "appgprj_6ac1b4fe606c81918b2290f4ce280229~appgver_96364abcc430819184417454477dfb78",
-  "deployment_id": "appgdep_6ac1c85468c881918004746bca0b5997",
+  "deployment_id": "appgdep_6ac1d67b25c08191adc74c556d360a04",
   "site_source_commit": "6526381daaddb0d752d4adbd754be850ee3e36f6",
   "archive_sha256": "sha256:c27f21a03bc0e863be6e75aaf47df89b339b42442cbe0e2275eb68965fc261ea",
   "api_budget_cny": 160,
@@ -22,6 +22,8 @@
     "live_probe": "passed"
   },
   "cloud_ready": false,
-  "env_revision": 2,
+  "env_revision": 3,
+  "authorized_experiment_id": "flash-minimal-20261004-01",
+  "runtime_token_check": "pending_cloud_doctor",
   "verification_token_revoked": true
 }
