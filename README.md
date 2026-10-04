@@ -40,7 +40,7 @@ uv run --locked bench report --output outputs/experiment
 
 - SDK/runtime `0.1.5rc1`；Pier `0c802fc067a425345b24d1c69411aa98acf61a1d`；DeepSWE `0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea`。详见 `resources/pins.json`、`resources/resolved.json`、`uv.lock`。
 - 官方任务说明原文保存在 `resources/task/instruction.md`，四组逐字共用。祷文在 `resources/prayer.txt`，没有界面的 `agent-teams` 标记。系统身份只在指定层级变动；真实路由始终 `deepseek-flash`。
-- 固定 SDK 实际使用 **OpenAI 兼容流式协议**，请求含 `thinking.type=enabled`、`reasoning_effort=max`、`max_tokens=256000`；上下文 1M。其他采样参数沿用原生默认，原始请求保存实际值。
+- 固定 SDK 实际使用 **OpenAI 兼容 Chat Completions 流式协议**，上游为 `https://mono.guimc.ltd/v1/chat/completions`；请求含 `thinking.type=enabled`、`reasoning_effort=max`、`max_tokens=256000`，上下文 1M。其他采样参数沿用原生默认，原始请求保存实际值。
 - 每次新建容器、工作树、DSH home 和 session。四组两轮按种子 `20261004` 随机排序。联网搜索、团队与辅助模型不在工具 schema 中。
 - 模型不会接收人工澄清；其澄清请求作为结果记录。能力只看官方 verifier，模型自评不计分。
 - 官方 collector 只读 HEAD。评测侧在模型停止后记录原始 Git 状态、打包工作树，再创建标明评测身份的快照提交，使未提交和新文件也进入官方补丁。验收测试保持原文。

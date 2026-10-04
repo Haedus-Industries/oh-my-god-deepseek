@@ -16,5 +16,5 @@
   "execution_seconds": 86400,
   "infrastructure_replacements": 2,
   "price_url": "https://api-docs.deepseek.com/quick_start/pricing/",
-  "upstream": "https://api.deepseek.com/chat/completions"
+  "upstream": "https://mono.guimc.ltd/v1/chat/completions"
 }

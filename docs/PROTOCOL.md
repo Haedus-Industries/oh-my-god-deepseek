@@ -6,7 +6,7 @@
 
 baseline 与用户祷告组不注入替代 system，使用固定 SDK 原生默认；gateway 在实际出站请求核对默认身份和整个 system。系统祷告在默认 system 最前添加同一全文；前沿身份只替换默认身份句，保留其余指导。若 native 身份发生变化，校验停止，不猜测替换位置。
 
-`deepseek-flash`、max 推理、1M 上下文、256000 请求输出上限在所有正式运行相同。固定 SDK 的实际协议是 OpenAI streaming，原生 session 日志扩展与插件 inventory 也保留，不自行加入温度、top_p 或新的策略。gateway 将首个实际工具 schema 作为本次共同 schema，后续必须一致。
+`deepseek-flash`、max 推理、1M 上下文、256000 请求输出上限在所有正式运行相同。固定 SDK 的实际协议是 OpenAI 兼容的 Chat Completions streaming，gateway 将请求发往 `https://mono.guimc.ltd/v1/chat/completions`；不增加 Responses 转换层。原生 session 日志扩展与插件 inventory 也保留，不自行加入温度、top_p 或新的策略。gateway 将首个实际工具 schema 作为本次共同 schema，后续必须一致。
 
 每轮四组，种子 `20261004` 决定顺序；并发上限 2，第二轮必须等待第一轮结束。每次从官方 base 创建独立容器、home 和 session，不复用模型代码。没有人工提示、澄清答案或策略介入。
 

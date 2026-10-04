@@ -8,6 +8,9 @@ from .common import ROOT, command, now, read_json, sha, write_json
 from .resources import verify_resources
 
 
+MIN_FREE_DISK_GIB = 20
+
+
 def fingerprint():
     files = list((ROOT / "src/dsbench").glob("*.py")) + list((ROOT / "resources").glob("*.json")) + [ROOT / "uv.lock", ROOT / "resources/prayer.txt", ROOT / "resources/no-network.yml"]
     return {p.relative_to(ROOT).as_posix(): sha(p) for p in files if p.name != "readiness.json"}
@@ -47,8 +50,9 @@ async def doctor(*, runtime=False, containers=False):
     if docker_capacity:
         cpus = min(cpus, docker_capacity["NCPU"])
         ram = min(ram, docker_capacity["MemTotal"])
-    checks["capacity"] = {"ok": cpus >= 4 and ram >= 20 * 1024**3 and free >= 60 * 1024**3,
-                          "cpus": cpus, "ram_gib": ram / 1024**3 if platform.system() == "Linux" else None, "free_gib": free / 1024**3}
+    checks["capacity"] = {"ok": cpus >= 4 and ram >= 20 * 1024**3 and free >= MIN_FREE_DISK_GIB * 1024**3,
+                          "cpus": cpus, "ram_gib": ram / 1024**3 if platform.system() == "Linux" else None,
+                          "free_gib": free / 1024**3, "required_free_gib": MIN_FREE_DISK_GIB}
     if runtime:
         checks["runtime_key"] = {"ok": bool(os.environ.get("DEEPSEEK_API_KEY")), "detail": "presence only; value is never persisted"}
         try:

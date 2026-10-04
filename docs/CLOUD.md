@@ -2,7 +2,7 @@
 
 ## 条件
 
-Linux x86_64；Docker daemon 和 `docker compose` 可用；至少 4 vCPU、20 GiB 可用内存、60 GiB 可用磁盘。`doctor` 同时考虑 Linux cgroup CPU/内存限制。两个任务环境各限制 2 CPU／8 GiB，verifier 也保留官方配额。如果 Cloud 环境无法提供 Docker 或配额，不要进入付费实验，应更换支持 Docker 的执行环境。
+Linux x86_64；Docker daemon 和 `docker compose` 可用；至少 4 vCPU、20 GiB 可用内存、20 GiB 可用磁盘。磁盘值是允许进入无付费容器预检的保守门槛，不是实验峰值的精确上界；运行期间仍应保留并监控剩余空间。`doctor` 同时考虑 Linux cgroup CPU/内存限制。两个任务环境各限制 2 CPU／8 GiB，verifier 也保留官方配额。如果 Cloud 环境无法提供 Docker 或配额，不要进入付费实验，应更换支持 Docker 的执行环境。
 
 Cloud setup 阶段运行 `bash scripts/cloud-setup.sh`。该阶段只安装 `uv.lock` 中的依赖、拉取固定仓库和镜像、记录镜像 digest、安装与容器 Python ABI 匹配的 worker 依赖并校验全部文件哈希。
 
@@ -12,7 +12,7 @@ Cloud setup 阶段运行 `bash scripts/cloud-setup.sh`。该阶段只安装 `uv.
 
 运行阶段环境变量 `DEEPSEEK_API_KEY` 必须可用。仅在 setup 阶段可见的旧式 Secrets 不能用于此方案；不要通过写入仓库、setup 产物或持久文件绕过生命周期。未配置运行阶段凭据时，`doctor --runtime` 会停下；不会测试付费连通性。
 
-评测侧需要访问 `api.deepseek.com`、官方价格文档；准备阶段需要 GitHub、PyPI、公开 DeepSWE 数据和官方 ECR 镜像。进入托管云端后，先读取环境网络策略与 cloud-environment-runtime 技能，使用该环境的代理、CA 和 Docker 配置。本项目的上游 HTTP 客户端继承代理设置与 `SSL_CERT_FILE`／`REQUESTS_CA_BUNDLE`，不关闭 TLS 校验。
+评测侧通过 `https://mono.guimc.ltd/v1/chat/completions` 使用 SDK 原生的 Chat Completions 流式协议，并访问官方价格文档；准备阶段需要 GitHub、PyPI、公开 DeepSWE 数据和官方 ECR 镜像。不要把接入点改成 Responses 协议，也不要回退到 `api.deepseek.com`。进入托管云端后，先读取环境网络策略与 cloud-environment-runtime 技能，使用该环境的代理、CA 和 Docker 配置。本项目的上游 HTTP 客户端继承代理设置与 `SSL_CERT_FILE`／`REQUESTS_CA_BUNDLE`，不关闭 TLS 校验。
 
 真实 API key 只供评测侧 gateway 读取，绝不写入任务配置或传入模型容器。任务容器 `network_mode=none`，仅有本次实验令牌；通过只挂载单个 Unix socket 文件与 gateway 通信。容器内 loopback relay 将 SDK 原生 HTTP 转发到该 socket，因此模型仍能在 localhost 上运行 SSE 项目测试，无法直接联网。gateway 只接受已注册令牌、固定真实模型、固定推理档位、固定提示层级和两项工具；每个请求均先做预算预留。
 
