@@ -11,7 +11,14 @@
   "api_budget_cny": 160,
   "total_budget_cny": 200,
   "paid_api_calls": 0,
-  "validation": {
+  "cloud_ready": true,
+  "env_revision": 3,
+  "authorized_experiment_id": "flash-minimal-20261004-01",
+  "runtime_token_check": "passed_cloud_doctor",
+  "verification_token_revoked": true,
+  "source_protocol": "codex-cloud-serial-v1",
+  "source_update_requires_deploy": true,
+  "published_validation": {
     "python_tests": 31,
     "worker_and_activity_tests": 11,
     "typecheck": true,
@@ -21,9 +28,12 @@
     "independent_review": true,
     "live_probe": "passed"
   },
-  "cloud_ready": false,
-  "env_revision": 3,
-  "authorized_experiment_id": "flash-minimal-20261004-01",
-  "runtime_token_check": "pending_cloud_doctor",
-  "verification_token_revoked": true
+  "source_validation": {
+    "python_tests": 36,
+    "api_and_activity_tests": 11,
+    "typecheck": true,
+    "lint": true,
+    "build": true
+  },
+  "runtime_token_checked_at": "2026-10-04T06:56:08.613959+00:00"
 }

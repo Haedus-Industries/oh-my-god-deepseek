@@ -14,7 +14,7 @@ from .common import ROOT, now, read_json, settings, write_json
 from .gateway import Gateway
 from .ledger import Ledger
 from .prompts import NATIVE_IDENTITY, prompts
-from .schedule import initial_schedule, thirds
+from .schedule import initial_schedule
 
 
 def classify(data, attempt_dir, broker_dir):
@@ -55,7 +55,7 @@ class State:
     def __init__(self, output):
         self.output = Path(output)
         self.path = self.output / "state.json"
-        self.data = read_json(self.path) if self.path.exists() else {"started_at": now(), "schedule": initial_schedule(settings()["seed"]), "attempts": {}, "results": {}, "replacements": 0}
+        self.data = read_json(self.path) if self.path.exists() else {"protocol": settings()["protocol"], "started_at": now(), "schedule": initial_schedule(settings()["seed"]), "attempts": {}, "results": {}, "replacements": 0}
         self.save()
 
     def save(self):
@@ -76,22 +76,14 @@ class State:
 
 
 def may_replace(result, replacements):
-    return (result.get("status") == "infrastructure_error" and replacements < 2
-            and not result.get("no_replay")
-            and result.get("reason") not in ("stream_or_usage_unknown", "outbound_request_rejected"))
+    # Exploratory protocol never automatically purchases replacement attempts.
+    return False
 
 
 async def execute_schedule(state, run_slot):
-    async def dispatch(slots):
-        pending = [slot for slot in slots if slot["id"] not in state.data["results"]
-                   or state.data["results"][slot["id"]]["status"] == "infrastructure_error"]
-        await asyncio.gather(*(run_slot(slot) for slot in pending))
-    for repetition in (1, 2):
-        await dispatch([s for s in state.data["schedule"] if s["repetition"] == repetition])
-    additions = thirds(state.data["results"])
-    state.data["third_schedule"] = additions
-    state.save()
-    await dispatch(additions)
+    for slot in state.data["schedule"]:
+        if slot["id"] not in state.data["results"]:
+            await run_slot(slot)
 
 
 async def smoke(gateway, endpoint, ledger, output):
@@ -233,7 +225,7 @@ async def run(output, smoke_only=False, dashboard_url=None):
                             return
             async with asyncio.timeout(max(0, deadline - time.time())):
                 await execute_schedule(state, slot_run)
-            expected = state.data["schedule"] + state.data.get("third_schedule", [])
+            expected = state.data["schedule"]
             state.data["end_reason"] = "completed" if all(s["id"] in state.data["results"] for s in expected) else "execution_time_limit"
         except TimeoutError:
             state.data["end_reason"] = "execution_time_limit"

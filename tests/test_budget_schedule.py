@@ -7,7 +7,7 @@ import pytest
 from dsbench.dryrun import MOCK_PRICES
 from dsbench.ledger import BudgetExceeded, Ledger, cost
 from dsbench.runner import State, execute_schedule, may_replace
-from dsbench.schedule import initial_schedule, thirds
+from dsbench.schedule import initial_schedule
 
 
 def test_concurrent_reservations_never_overspend(tmp_path):
@@ -47,19 +47,12 @@ def test_per_run_limit_includes_unknown_charges(tmp_path):
     assert ledger.reserve("U1", MOCK_PRICES)
 
 
-def test_rounds_and_third_trigger_use_only_primary_pairs():
+def test_fixed_schedule_has_two_balanced_rounds():
     schedule = initial_schedule()
     assert schedule == initial_schedule()
+    assert len(schedule) == 8
     assert {s["arm"] for s in schedule[:4]} == set("BUSF")
     assert {s["arm"] for s in schedule[4:]} == set("BUSF")
-    results = {s["id"]: {"status": "scored", "passed": False} for s in schedule}
-    results["U2"]["passed"] = True
-    assert [s["id"] for s in thirds(results)] == ["U3"]
-    results["S1"] = {"status": "infrastructure_error", "passed": False}
-    results["S2"]["passed"] = True
-    assert [s["id"] for s in thirds(results)] == ["U3"]
-    del results["F2"]
-    assert thirds(results) == []
 
 
 def test_resume_preserves_completed_primary_and_attempt_identity(tmp_path):
@@ -74,7 +67,7 @@ def test_resume_preserves_completed_primary_and_attempt_identity(tmp_path):
     assert restored.data["replacements"] == 0
 
 
-async def test_full_adaptive_schedule_then_resume_makes_no_new_calls(tmp_path):
+async def test_fixed_serial_schedule_then_resume_makes_no_new_calls(tmp_path):
     state = State(tmp_path)
     calls = []
     async def simulate(slot):
@@ -83,19 +76,16 @@ async def test_full_adaptive_schedule_then_resume_makes_no_new_calls(tmp_path):
         passed = slot["arm"] == "S" or slot["arm"] == "U" and slot["repetition"] == 2 or slot["arm"] == "F" and slot["repetition"] == 1
         state.finish(attempt, {"status": "scored", "passed": passed})
     await execute_schedule(state, simulate)
-    assert len(calls) == 10
+    assert len(calls) == 8
     assert {s["arm"] for s in calls[:4]} == set("BUSF")
     assert {s["arm"] for s in calls[4:8]} == set("BUSF")
-    assert {s["id"] for s in calls[8:]} == {"U3", "F3"}
-    assert all(s["phase"] == "consistency" for s in calls[8:])
     await execute_schedule(State(tmp_path), simulate)
-    assert len(calls) == 10
+    assert len(calls) == 8
 
 
-def test_at_most_two_infra_replacements_and_unknown_usage_never_replays():
+def test_infrastructure_errors_are_not_automatically_replaced():
     result = {"status": "infrastructure_error", "reason": "DockerError"}
-    assert may_replace(result, 0) and may_replace(result, 1)
-    assert not may_replace(result, 2)
+    assert not may_replace(result, 0)
     assert not may_replace({**result, "reason": "stream_or_usage_unknown"}, 0)
     assert not may_replace({**result, "no_replay": True}, 0)
     assert not may_replace({"status": "scored", "passed": False}, 0)

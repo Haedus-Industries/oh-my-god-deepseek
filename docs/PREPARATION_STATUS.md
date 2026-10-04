@@ -1,12 +1,16 @@
-# 准备阶段验收记录
+# 当前准备验收
 
-本地准备已完成，尚未进行真实 DeepSeek 模型测试。
+更新时间：2026-10-04（Asia/Shanghai）。Codex Cloud 串行探索协议 `codex-cloud-serial-v1` 的完整无付费预检已通过，当前源码/资源指纹与就绪记录一致。
 
-- 最终离线测试 **21 项全部通过**，包含真实固定 SDK 的四组工具循环、跨调用 shell 状态证明文件、editor 改动、推理文本保存、逐字提示层级、缓存 token 分类、流式断连、跨 chunk 密钥过滤、共享预算、恢复不重复调用、两次基础设施替换上限、第三次触发及主结果分离。
-- 四组原生模拟共 **16 个本地请求，零付费 API 调用**。模拟账本金额不是实际消费。最终 JUnit 在 `outputs/pytest-release.xml`；机器验收记录在 `resources/preparation-status.json`。
-- 固定仓库提交、SDK/runtime 发布包和依赖锁已验证；官方任务通过 Git blob 原始字节导出，避免 Windows 行尾转换。公开历史数据和选题分析已保存。
-- 四组完整任务提示导出于 `resources/prompts.json`。Windows 实际 SDK system、两项工具 schema 和请求参数导出于 `resources/sdk-windows-model-visible.json`，仅证明本地原生配置；正式 Linux 使用 bash。
-- 当前为 Windows，Docker 不可用，因此 **镜像 digest、Linux 容器隔离、真实 Unix relay、base/oracle 判分对照尚未验收**。这些必须在 Cloud 上由 `doctor --runtime --containers` 完成，失败时禁止付费运行。
-- API key 未提供；短回复协议检查、首次八次与可能的第三次均未执行，没有真实能力结果。预算为总计 ¥200，API ¥160，单次 ¥20，环境与余量 ¥40；时间和样本规则保持原计划。
+- Python **36 项通过**，包含实际 Unix socket 流式中继、固定 SDK、持久 shell、editor、预算、未知费用与恢复；JUnit：`outputs/pytest-cloud-serial.xml`。
+- 看板源码类型检查、ESLint、正式构建和 **11 项 API/活动测试通过**。线上版本仍待发布，见 DASHBOARD_STATUS.md。
+- 现有 vfs daemon 可运行官方镜像的单层派生版本，大小约 3.78 GB。固定来源 manifest 为 `sha256:6a728da85db92e3fcd4826473886dbfe14f965e8edb8e62707fa0f35f14b681c`；两次导出 tar 摘要完全一致。来源摘要和本地镜像 ID 在资源锁中，不假称原官方 RepoDigest。
+- 串行官方控制通过：**base reward 0，oracle reward 1**；oracle 的 47 项新增测试和 70 项保留测试全部通过。agent/verifier 独立阶段使用同一镜像；容器实际限额 2 CPU / 8 GiB，network_mode=none。
+- Linux 本地四组 SDK 模拟（16 请求）通过；一个真实容器模拟（4 请求）通过，证明持久 bash、官方 editor、Unix gateway、流式响应与工作树保存。
+- 基础与 oracle 控制期间最低可用磁盘超过 17 GiB；不需要修改平台驱动、挂载磁盘或扩容。每次容器启动和运行期间仍检查 3 GiB 余量。
+- 官方价格解析、运行阶段凭据存在性及看板协议/稳定实验 ID 鉴权通过。
+- **付费模型调用 0**，`outputs/experiment` 尚未创建；没有能力结果。固定八次串行，各组两次，不追加或自动付费补跑；预算和时限见 CLOUD.md。
 
-该记录是本地准备快照，不代表未来 Cloud 的实时就绪状态。执行步骤见 `docs/CLOUD.md`；正式原始资料和中文报告将由 `run`／`report` 生成。
+最新验收：`outputs/doctor-cloud-serial-command.json`（退出 0），就绪记录：`resources/readiness.json`，详细原始证据：`outputs/preflight/2026-10-04T06-46-15.826525+00-00/`。已修复共享镜像被清理和 HTTPConnection 中继关闭错误。
+
+准备授权不包含付费调用。[开始测试 Prompt](START_TEST_PROMPT.md) 可用于下一条消息授权启动。若代码或实验输入改变，需要重新验证受影响的就绪条件。

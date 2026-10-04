@@ -7,7 +7,7 @@ import uuid
 from pathlib import Path
 
 from .backend import prepared_task
-from .common import command, now, read_json, write_json
+from .common import ROOT, command, now, read_json, write_json
 
 
 def stop_orphans(output, attempt):
@@ -38,15 +38,18 @@ def grade_saved_patch(output, attempt):
     if reward.exists():
         return read_json(reward)
     task = prepared_task()
-    image = "dsbench-resume-verifier:" + __import__("hashlib").sha256((task / "tests/Dockerfile").read_bytes()).hexdigest()[:16]
-    command(["docker", "build", "--platform", "linux/amd64", "-t", image, task / "tests"], timeout=1800)
+    from .flat_image import require_container_space
+    require_container_space()
+    image = read_json(ROOT / "resources/resolved.json")["image_reference"]
     name = "dsbench-resume-" + uuid.uuid4().hex[:12]
     logs = directory / "verifier"
     logs.mkdir(parents=True, exist_ok=True)
     started = now()
     args = ["docker", "run", "--rm", "--name", name, "--network", "none", "--cpus", "2", "--memory", "8g",
             "--sysctl", "net.ipv6.conf.all.disable_ipv6=0", "--mount", f"type=bind,source={patch.resolve()},target=/logs/artifacts/model.patch,readonly",
-            "--mount", f"type=bind,source={logs.resolve()},target=/logs/verifier", "--entrypoint", "bash", image, "/tests/test.sh"]
+            "--mount", f"type=bind,source={logs.resolve()},target=/logs/verifier",
+            "--mount", f"type=bind,source={(task / 'tests').resolve()},target=/opt/dsbench-tests-source,readonly",
+            "--entrypoint", "bash", image, "-c", "cp -a /opt/dsbench-tests-source /tests && bash /tests/test.sh"]
     try:
         with (logs / "recovered-verifier.log").open("wb") as stream:
             result = subprocess.run(args, stdout=stream, stderr=subprocess.STDOUT, timeout=1800, check=False)

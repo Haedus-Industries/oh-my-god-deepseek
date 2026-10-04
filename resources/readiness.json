@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "resources": {
+      "ok": true,
+      "sdk": "0.1.5rc1",
+      "image_reference": "sha256:daf6a27dae17b7fa159305bdac826238ac38d7f759348caf309de4347273c496"
+    },
+    "platform": {
+      "ok": true,
+      "detail": "Linux x86_64"
+    },
+    "docker": {
+      "ok": true
+    },
+    "capacity": {
+      "ok": true,
+      "cpus": 4.0,
+      "ram_gib": 32.0,
+      "free_gib": 25.02216339111328,
+      "required_ram_gib": 8,
+      "required_free_gib": 3
+    },
+    "single_container_disk": {
+      "ok": true
+    },
+    "runtime_key": {
+      "ok": true,
+      "detail": "presence only; value is never persisted"
+    },
+    "official_price_and_route": {
+      "ok": true,
+      "prices": {
+        "rates": {
+          "peak": {
+            "input_hit": 0.006,
+            "input_miss": 0.3,
+            "output": 1.2
+          },
+          "off_peak": {
+            "input_hit": 0.003,
+            "input_miss": 0.15,
+            "output": 0.6
+          }
+        },
+        "model_version": "DeepSeek-V4.1-Flash",
+        "source": "https://api-docs.deepseek.com/quick_start/pricing/",
+        "at": "2026-10-04T06:46:15.724059+00:00",
+        "usd_cny": 7.3,
+        "sha256": "210f102275ccf1a6542f08a3bc9e4b4c7c83278cb74b35217bffa112df6363b2"
+      }
+    },
+    "grader_controls": {
+      "ok": true,
+      "base_reward": 0,
+      "oracle_reward": 1,
+      "evidence": "/workspace/oh-my-god-deepseek/outputs/preflight/2026-10-04T06-46-15.826525+00-00"
+    },
+    "native_linux_wire": {
+      "ok": true,
+      "evidence": "/workspace/oh-my-god-deepseek/outputs/preflight/2026-10-04T06-46-15.826525+00-00/dry-run"
+    },
+    "container_sdk_gateway": {
+      "ok": true,
+      "evidence": "/workspace/oh-my-god-deepseek/outputs/preflight/2026-10-04T06-46-15.826525+00-00/container-probe"
+    },
+    "container_isolation": {
+      "ok": true
+    },
+    "dashboard": {
+      "ok": true,
+      "schema_version": 1,
+      "experiment_id": "flash-minimal-20261004-01",
+      "paid_api_calls": 0
+    }
+  },
+  "fingerprint": {
+    "src/dsbench/__init__.py": "dd77c3313c8a02540c8f5ed9c651bd98a3b221225c36e8a275ca49b43c30d4d2",
+    "src/dsbench/backend.py": "10a3cd60c6b821f7436710aae771fc3db12ccb9050067e5e1777a9c7fabb52ac",
+    "src/dsbench/cli.py": "b0260b062f14a1ec142c099e19bc9e1f6fda6a4c25fb201be994afeba00aae58",
+    "src/dsbench/common.py": "512e262a073d00131a8b3cfc05a5d6db56e7f8e3f471aba7f964efa5794a0e41",
+    "src/dsbench/container_probe.py": "0bb32755cd011bdb86408ffc4f14d3f13019426f0688a724c385607c6041b581",
+    "src/dsbench/doctor.py": "ab02965af481e8067b46abdca327adf293134f72df7efe16a3225b2989679210",
+    "src/dsbench/dryrun.py": "67ed741dcc5cddfc5bc222ae1270f1f55e2d0b8503272737042e9fa6ee1017f5",
+    "src/dsbench/gateway.py": "364abd6757701d3171db26b1e7501bb812321af780a11bd7440535cd1ff5f724",
+    "src/dsbench/ledger.py": "4332689d9682b6a3132a14d3df114b55b98dc95e3fa9297296089d4d32734c17",
+    "src/dsbench/lifecycle.py": "76f9ae2fb2d6d5f27eba1e4f90fcdaf39c9060b024c70980ec3aa76f5373e691",
+    "src/dsbench/mock_api.py": "739d09a248f4a97849f4b8756da71e6ffe4da9b6ff77beceaf5f28920f2364b2",
+    "src/dsbench/pier_adapter.py": "2e3058fb70e9af4c2f3d83516e4006d90964af1609d75eb2803369a5b55d91d3",
+    "src/dsbench/pricing.py": "d15923cf346d89be41645e8122ab7b71f3d405dd3b26cf8cc0eb019393b0b75e",
+    "src/dsbench/prompts.py": "003cef04df1ab64ddbb459e9da3235d6ad34d1ce7f8d654db8e644c07a5018f0",
+    "src/dsbench/recovery.py": "9022131fd2a959a39721746e01de7eb89e626de6b5e851e4b17a2d5e52857efd",
+    "src/dsbench/report.py": "1dbea5408a7b5e02d6c4439e3a5b22e376710111fab98b123da64b165b7234e8",
+    "src/dsbench/resources.py": "bc064fe8b405da72d166a56bc6560cdb3fe7b409ba13b38ef2248e61c01bf1cb",
+    "src/dsbench/runner.py": "c808d51ac3746697a354af4fa7d80efc44dd31c7ddcf08a33c6ca8413d229534",
+    "src/dsbench/schedule.py": "e666a036ff4e9523a4d781c546f98b188d6184e8f4ddf23f03f34a90aa4c7a6c",
+    "src/dsbench/selection.py": "db175927ed8c4139a5aea16ffc6d21de62080a77a3d88fc6dfa0bf0c0c6fba64",
+    "src/dsbench/telemetry.py": "2057b51f818b367bbbeeda1bc38c5591fd0b0fb72abf9c198c835962e42af1e8",
+    "src/dsbench/worker.py": "386ca5abedf0d6e2878534f00ba1cdbbd80910d2bfe1f429350bed9fab65dd92",
+    "src/dsbench/flat_image.py": "69b60053dea3d4974ff955d7946e163b0e360babb0ad2756d2ad78daf5895eed",
+    "resources/pins.json": "dcb108446b026601acecb1294c19147efe4173048be6d2667a2b1777c50cf95b",
+    "resources/resolved.json": "aff7be2e25cb71fcec67a9f1d05d4244715191328c9bccfdd166a5d472469c10",
+    "resources/experiment.json": "f4d0bcd15576321c74fb858d363b9ea19eb908b22513f601e48ed4e6104746ce",
+    "resources/prompts.json": "3fea808a0035a7c6f730ec8389eef081e3621cfd3b02aa7d2feadbf9ba562c68",
+    "resources/prayer.txt": "af279376cf5992e3f6f7d5f4b5567e48e2fadfdfa9bf8258e3b595731915b54b",
+    "resources/no-network.yml": "110a254b187050386d24482bf86844de20df7565d5c055038f47eb124238a906",
+    "uv.lock": "270afb433b86a2bbb92cfaad4332aa4a89dc18df636e7169cdfcfd4e6e3182a3"
+  },
+  "at": "2026-10-04T06:56:08.612118+00:00"
+}

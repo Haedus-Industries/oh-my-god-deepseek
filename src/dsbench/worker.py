@@ -10,6 +10,7 @@ import socket
 import threading
 import subprocess
 import tarfile
+from contextlib import closing
 from pathlib import Path
 
 from deepseek_harness import DeepSeekHarness
@@ -73,7 +74,7 @@ class UnixConnection(http.client.HTTPConnection):
 
 class Relay(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
-        with UnixConnection("localhost", timeout=10800) as connection:
+        with closing(UnixConnection("localhost", timeout=10800)) as connection:
             body = self.rfile.read(int(self.headers.get("Content-Length", "0")))
             headers = {k: v for k, v in self.headers.items() if k.lower() not in ("host", "connection", "transfer-encoding")}
             connection.request("POST", self.path, body, headers)

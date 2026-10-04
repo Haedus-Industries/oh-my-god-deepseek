@@ -110,15 +110,11 @@ def prepare(*, images=False, history=True):
     if images:
         if platform.system() != "Linux":
             raise RuntimeError("Image preparation requires Linux Docker")
-        tag = pins()["image"]
-        if previous.get("image_digest"):
-            image = previous["image_digest"]
-            command(["docker", "pull", "--platform", "linux/amd64", image])
-        else:
-            command(["docker", "pull", "--platform", "linux/amd64", tag])
-            inspection = json.loads(command(["docker", "image", "inspect", tag]))[0]
-            image = next(x for x in inspection["RepoDigests"] if x.startswith(tag.split(":")[0] + "@sha256:"))
-        lock["image_digest"] = image
+        from .flat_image import prepare_flat_image
+        image, provenance = prepare_flat_image(previous)
+        lock.pop("image_digest", None)
+        lock["image_reference"] = image
+        lock["image_provenance"] = provenance
         # Runtime has the same Python ABI as the task image; install with hashes
         # from the existing universal lock, no resolution or upgrade here.
         python_version = command(["docker", "run", "--rm", "--network", "none", image, "python3", "-c", "import sys;print(f'{sys.version_info.major}.{sys.version_info.minor}')"])
@@ -154,8 +150,11 @@ def verify_resources(require_image=False):
     if lock.get("history") and sha(ROOT / "resources/history/trials.json") != lock["history"]["sha256"]:
         raise ValueError("History snapshot changed")
     if require_image:
-        if "image_digest" not in lock or "worker_files" not in lock:
+        if "image_reference" not in lock or "image_provenance" not in lock or "worker_files" not in lock:
             raise ValueError("Run prepare --images in Cloud first")
+        inspection = json.loads(command(["docker", "image", "inspect", lock["image_reference"]]))[0]
+        if inspection["Id"] != lock["image_provenance"]["local_image_id"] or len(inspection["RootFS"]["Layers"]) != 1:
+            raise ValueError("Flattened image identity/layer drift")
         for relative, digest in lock["worker_files"].items():
             if sha(ROOT / ".cache/worker-site" / relative) != digest:
                 raise ValueError(f"Worker dependency drift: {relative}")

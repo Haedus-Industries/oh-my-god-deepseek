@@ -96,7 +96,7 @@ def report(output):
     (output / "results.csv").write_text(stream.getvalue(), encoding="utf-8-sig")
     data = {"at": now(), "task": "effect-sse-httpapi-streaming", "config": settings(), "attempts": rows,
             "primary": {arm: [summary.get("results", {}).get(f"{arm}{n}") for n in (1, 2)] for arm in "BUSF"},
-            "consistency": {arm: summary.get("results", {}).get(f"{arm}3") for arm in "BUSF"}, "accounting": ledger.summary()}
+            "protocol": "codex-cloud-serial-v1", "accounting": ledger.summary()}
     signals = []
     primary = data["primary"]
     baseline_fails = all(x and x.get("status") == "scored" and x.get("passed") is False for x in primary["B"])
@@ -106,7 +106,7 @@ def report(output):
                 signals.append(f"B 的前两次均失败，{arm} 的前两次均通过：值得后续投入的候选信号。")
     data["candidate_signals"] = signals
     write_json(output / "research-summary.json", data)
-    lines = ["# DeepSeek V4.1 Flash 提示词探索报告", "", "范围限定：单题、固定 DSH Minimal＋editor、当前资源限制。前两次是主比较；第三次独立呈现，不以多数票覆盖原始结果。", "", "## 固定前两次", "", "|组别|第一次|第二次|", "|---|---|---|"]
+    lines = ["# DeepSeek V4.1 Flash 提示词探索报告", "", "范围限定：单题、固定 DSH Minimal＋editor、当前资源限制。四组各两次，固定八次串行比较，不追加样本或自动补跑。", "", "## 固定前两次", "", "|组别|第一次|第二次|", "|---|---|---|"]
     def display(result):
         if not result:
             return "未完成"
@@ -114,9 +114,6 @@ def report(output):
         return passed + ("（agent 时间上限）" if result.get("truncation") == "agent_time" else "") if result.get("status") == "scored" else f"{result.get('status')}（最终补丁：{passed}）"
     for arm in "BUSF":
         lines.append(f"|{arm}|{display(primary[arm][0])}|{display(primary[arm][1])}|")
-    lines += ["", "## 第三次一致性检查", "", "|组别|第三次|", "|---|---|"]
-    for arm in "BUSF":
-        lines.append(f"|{arm}|{display(data['consistency'][arm]) if data['consistency'][arm] else '未追加'}|")
     lines += ["", "## 行为、文本与资源", "", "|运行|工具调用|测试命令|编辑操作|推理字数|输入非缓存/缓存|输出 token|已结算估算 ¥|保留额度 ¥|", "|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for row in rows:
         lines.append(f"|{row['attempt']}|{row['tool_calls']}|{row['test']}|{row['edit']}|{row['reasoning_chars']}|{row['input_uncached']}/{row['input_cached']}|{row['output_tokens']}|{row['settled_cny']:.4f}|{row['held_cny']:.4f}|")
@@ -124,7 +121,7 @@ def report(output):
     for row in rows:
         lines.append(f"|{row['attempt']}|{row['plan_mentions']}|{row['self_check_mentions']}|{row['role_mentions']}|{row['clarification_mentions']}|")
     accounting = ledger.summary()
-    lines += ["", f"API 已结算估算 ¥{accounting['settled_cny']:.4f}；未知费用保留 ¥{accounting['held_cny']:.4f}。连通性检查、替换和失败请求均包含在总账中。环境费用未通过 API 账本计量，预留 ¥40。", "", "计费依据各请求保存的官方价格快照和 usage；在未覆盖的中国节假日或跨峰谷请求上使用保守上界，应与服务商账单核对。token 的缓存分类不重复计入输入。", "", "API 返回的推理文本不等于完整内部思维链。关键词统计只用于定位材料，不能证明思维质量。按运行的 reasoning、answer、tools 文件盲审：计划的具体性、自我纠错、角色措辞、澄清请求、探索和测试覆盖、重复编辑与修复循环。不要将角色提示输入中的词汇当作输出行为。", "", "时长见 research-summary.json 的 timing：分别比较 agent 与 verifier；结合 token 和费用判断变化是否只是增加工作量。预算或时间截断、基础设施错误与正常不通过分列。", "", "## 候选信号与后续", ""]
+    lines += ["", f"API 已结算估算 ¥{accounting['settled_cny']:.4f}；未知费用保留 ¥{accounting['held_cny']:.4f}。连通性检查和失败请求均包含在总账中。环境费用未通过 API 账本计量，预留 ¥40。", "", "计费依据各请求保存的官方价格快照和 usage；在未覆盖的中国节假日或跨峰谷请求上使用保守上界，应与服务商账单核对。token 的缓存分类不重复计入输入。", "", "API 返回的推理文本不等于完整内部思维链。关键词统计只用于定位材料，不能证明思维质量。按运行的 reasoning、answer、tools 文件盲审：计划的具体性、自我纠错、角色措辞、澄清请求、探索和测试覆盖、重复编辑与修复循环。不要将角色提示输入中的词汇当作输出行为。", "", "时长见 research-summary.json 的 timing：分别比较 agent 与 verifier；结合 token 和费用判断变化是否只是增加工作量。预算或时间截断、基础设施错误与正常不通过分列。", "", "## 候选信号与后续", ""]
     lines += signals or ["尚未出现预设的两次失败对两次通过信号；仍需人工盲审反复出现的明显风格变化。"]
     lines += ["", "本轮不自动扩大付费实验；结果不支持总体能力或绝对能力上界提高的结论。公开历史数据仅用于选题，没有加入本实验成功次数。", ""]
     (output / "report.md").write_text("\n".join(lines), encoding="utf-8")

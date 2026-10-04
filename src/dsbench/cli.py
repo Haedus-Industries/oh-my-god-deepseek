@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser(prog="bench", description="DSH Minimal 首轮提示词探索实验")
     commands = parser.add_subparsers(dest="command", required=True)
     prepare = commands.add_parser("prepare", help="锁定公开资源，不调用模型")
-    prepare.add_argument("--images", action="store_true", help="Linux Cloud: 拉取并固定镜像，准备 worker 依赖")
+    prepare.add_argument("--images", action="store_true", help="Linux Cloud: 流式导入固定镜像的单层派生版本，准备 worker 依赖")
     doctor = commands.add_parser("doctor", help="预检；默认不调用模型")
     doctor.add_argument("--runtime", action="store_true", help="检查运行阶段凭据、实时价格和模型映射")
     doctor.add_argument("--containers", action="store_true", help="运行不调用模型的 base/oracle 判分与隔离检查")
@@ -37,7 +37,7 @@ def main():
         if args.command == "prepare":
             from .resources import prepare
             result = prepare(images=args.images)
-            result = {"prepared": True, "image_pinned": "image_digest" in result, "paid_api_calls": 0}
+            result = {"prepared": True, "image_pinned": "image_reference" in result, "paid_api_calls": 0}
         elif args.command == "dry-run":
             from .dryrun import dry_run
             result = asyncio.run(dry_run(args.output))
@@ -49,6 +49,12 @@ def main():
                 from .telemetry import doctor_dashboard
                 result["dashboard"] = doctor_dashboard(args.dashboard_url, os.environ.get("DSBENCH_DASHBOARD_TOKEN", ""))
                 result["ready"] = result["ready"] and result["dashboard"]["ok"]
+                from .common import read_json, write_json
+                write_json(ROOT / "outputs/doctor.json", result)
+                if args.containers and (ROOT / "resources/readiness.json").exists():
+                    readiness = read_json(ROOT / "resources/readiness.json")
+                    readiness["checks"]["dashboard"] = result["dashboard"]
+                    write_json(ROOT / "resources/readiness.json", readiness)
             print(json.dumps(result, ensure_ascii=False, indent=2))
             sys.exit(0 if result["ready"] else 2)
         elif args.command == "run":

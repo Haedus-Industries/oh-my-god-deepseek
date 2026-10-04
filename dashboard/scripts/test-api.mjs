@@ -31,7 +31,7 @@ try{
    const states=await Promise.all([request("snapshot",{...state,status:"a"}),request("snapshot",{...state,status:"b"})]);
    assert.deepEqual(states.map(r=>r.status).sort(),[200,409]);
  });
- const module=await build({entryPoints:["lib/activity.ts"],bundle:true,write:false,format:"esm",platform:"node"});
+ const activityModule=await build({entryPoints:["lib/activity.ts"],bundle:true,write:false,format:"esm",platform:"node"});
  await test("historical page boundary survives new arrivals",async()=>{
    const first=await(await request("events?experiment=research&channel=reasoning")).json();
    const bound=first.next_cursor;
@@ -40,7 +40,7 @@ try{
    assert.deepEqual(old.records.map(r=>r.id),first.records.map(r=>r.id));
    assert.equal(old.next_cursor,bound);
  });
- const {activities}=await import(`data:text/javascript;base64,${Buffer.from(module.outputFiles[0].text).toString("base64")}`);
+ const {activities}=await import(`data:text/javascript;base64,${Buffer.from(activityModule.outputFiles[0].text).toString("base64")}`);
  await test("activity follows source time and pairs tools with output",async()=>{
    const row=(id,channel,second,content)=>({id,seq:second,channel,source_at:`2026-10-04T00:00:0${second}Z`,request_id:"request-1",content});
    const rows=[row("answer","answer",4,"done"),row("result","tool_result",3,JSON.stringify({message:{source:{callId:"call"},content:[{text:"output"}]}})),row("thought","reasoning",1,"check"),row("call","tool_call",2,JSON.stringify({callId:"call",name:"bash",arguments:'{"command":"ls"}'}))];

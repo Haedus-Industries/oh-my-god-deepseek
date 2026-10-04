@@ -17,7 +17,7 @@ def test_pricing_table_flash_column_and_schedules():
     assert rate_at(prices, datetime(2026, 10, 8, 2, tzinfo=timezone.utc))["output"] == 1.2
 
 
-def test_report_keeps_thirds_separate_and_never_calls_api(tmp_path):
+def test_report_fixed_pairs_and_never_calls_api(tmp_path):
     attempts, results = {}, {}
     for arm in "BUSF":
         for n in (1, 2):
@@ -32,5 +32,5 @@ def test_report_keeps_thirds_separate_and_never_calls_api(tmp_path):
     assert generated["paid_api_calls"] == 0
     text = (tmp_path / "report.md").read_text(encoding="utf-8")
     assert "|B|不通过|不通过|" in text
-    assert "|B|通过|" in text
+    assert "第三次一致性检查" not in text
     assert "候选信号" in text

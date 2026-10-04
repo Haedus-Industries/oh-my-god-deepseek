@@ -15,6 +15,6 @@
 
 该题有多种较强模型能解决，整体又相当困难，适合探索身份提示是否让 Flash 跨过具体工程难点。约 30%–40% 仅是跨 harness 的启发式估计，不能称为置信区间，也不能据此证明题目位于严格能力上界之外。
 
-模型家族相关性、不同推理档位、题目偏好和公开测试污染仍影响估计；1PL 无法表示所有 task×model 交互。本轮执行前不额外调用模型校准难度。首次两次是主比较；第三次仅检查一致性，不择优挑样本或把历史通过加入分母。
+模型家族相关性、不同推理档位、题目偏好和公开测试污染仍影响估计；1PL 无法表示所有 task×model 交互。本轮执行前不额外调用模型校准难度。固定四组各两次，不追加样本或把历史通过加入分母。
 
 完整分析在 `resources/history/selection.json`；复现命令：`uv run --locked --extra analysis bench analyze-selection`。统计实现见 `src/dsbench/selection.py`，假设见 `docs/PROTOCOL.md`。

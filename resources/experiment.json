@@ -10,11 +10,12 @@
   "environment_and_margin_cny": 40,
   "trial_budget_cny": 20,
   "usd_cny": 7.3,
-  "concurrency": 2,
+  "concurrency": 1,
   "agent_seconds": 10800,
   "verifier_seconds": 1800,
   "execution_seconds": 86400,
-  "infrastructure_replacements": 2,
+  "infrastructure_replacements": 0,
   "price_url": "https://api-docs.deepseek.com/quick_start/pricing/",
-  "upstream": "https://mono.guimc.ltd/v1/chat/completions"
+  "upstream": "https://mono.guimc.ltd/v1/chat/completions",
+  "protocol": "codex-cloud-serial-v1"
 }

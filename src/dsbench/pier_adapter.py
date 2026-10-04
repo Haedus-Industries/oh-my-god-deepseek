@@ -3,6 +3,7 @@ import json
 import asyncio
 import shlex
 from pathlib import Path
+from pathlib import Path
 
 from pier.agents.base import BaseAgent
 from pier.environments.docker.docker import DockerEnvironment
@@ -18,7 +19,27 @@ class MinimalDocker(DockerEnvironment):
 
     def __init__(self, *args, extra_mounts=(), **kwargs):
         self.extra_mounts = list(extra_mounts)
+        self.is_verifier = "__verifier__" in kwargs.get("session_id", "")
+        if self.is_verifier:
+            kwargs["mounts_json"] = list(kwargs.get("mounts_json") or []) + [{
+                "type": "bind", "source": str(Path(kwargs["environment_dir"]).resolve()),
+                "target": "/opt/dsbench-tests-source", "read_only": True,
+            }]
         super().__init__(*args, **kwargs)
+
+    async def start(self, force_build):
+        from .flat_image import require_container_space
+        require_container_space()
+        await super().start(force_build)
+        if self.is_verifier:
+            result = await self.exec("cp -a /opt/dsbench-tests-source /tests", timeout_sec=60)
+            if result.return_code:
+                raise RuntimeError("Cannot install original verifier files")
+
+    async def stop(self, delete):
+        # Upstream delete=True uses compose down --rmi all, which deletes the
+        # shared local-only flattened image. Remove containers, retain the image.
+        await super().stop(delete=False)
 
     def _default_log_mounts(self):
         return super()._default_log_mounts() + self.extra_mounts
