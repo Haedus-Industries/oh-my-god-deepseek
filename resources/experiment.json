@@ -1,0 +1,20 @@
+{
+  "seed": 20261004,
+  "model": "deepseek-flash",
+  "reasoning_effort": "max",
+  "context_tokens": 1000000,
+  "reservation_input_tokens": 1048576,
+  "max_tokens": 256000,
+  "total_budget_cny": 200,
+  "api_budget_cny": 160,
+  "environment_and_margin_cny": 40,
+  "trial_budget_cny": 20,
+  "usd_cny": 7.3,
+  "concurrency": 2,
+  "agent_seconds": 10800,
+  "verifier_seconds": 1800,
+  "execution_seconds": 86400,
+  "infrastructure_replacements": 2,
+  "price_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+  "upstream": "https://api.deepseek.com/chat/completions"
+}

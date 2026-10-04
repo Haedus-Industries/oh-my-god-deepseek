@@ -1,0 +1,345 @@
+{
+  "snapshot_sha256": "310cb428fe8914cff21b8edcb0b17256884efca55666bd6d6646d223c77d2ce6",
+  "all_rows": 31617,
+  "scored_rows": 31462,
+  "tasks": 113,
+  "configurations": 70,
+  "selected_task": "effect-sse-httpapi-streaming",
+  "selected_passes": 52,
+  "selected_trials": 280,
+  "selected_model_config_counts": {
+    "kimi-k2-7-code | None | mini_swe_agent_kimi_k2_7_code_default": [
+      0,
+      4
+    ],
+    "gemini-3-8-flash | medium | mini_swe_agent_gemini_3_8_flash_medium": [
+      0,
+      4
+    ],
+    "gemini-3-1-pro-preview | high | mini_swe_agent_gemini_3_1_pro_preview_high": [
+      0,
+      4
+    ],
+    "gpt-5-5 | xhigh | mini_swe_agent_gpt_5_5_xhigh": [
+      2,
+      4
+    ],
+    "claude-opus-4-8 | max | mini_swe_agent_claude_opus_4_8_max": [
+      0,
+      4
+    ],
+    "gpt-6-astra | xhigh | mini_swe_agent_gpt_6_astra_xhigh": [
+      3,
+      4
+    ],
+    "gpt-5-6-terra | max | mini_swe_agent_gpt_5_6_terra_max": [
+      1,
+      4
+    ],
+    "gpt-5-6-luna | high | mini_swe_agent_gpt_5_6_luna_high": [
+      0,
+      4
+    ],
+    "claude-sonnet-5 | low | mini_swe_agent_claude_sonnet_5_low": [
+      0,
+      4
+    ],
+    "claude-sonnet-5 | medium | mini_swe_agent_claude_sonnet_5_medium": [
+      1,
+      4
+    ],
+    "glm-5-2 | high | mini_swe_agent_glm_5_2_high": [
+      0,
+      4
+    ],
+    "gpt-6-astra | max | mini_swe_agent_gpt_6_astra_max": [
+      2,
+      4
+    ],
+    "gpt-5-5 | medium | mini_swe_agent_gpt_5_5_medium": [
+      3,
+      4
+    ],
+    "gpt-5-6-sol | xhigh | mini_swe_agent_gpt_5_6_sol_xhigh": [
+      1,
+      4
+    ],
+    "gpt-5-5 | low | mini_swe_agent_gpt_5_5_low": [
+      0,
+      4
+    ],
+    "claude-opus-5 | high | mini_swe_agent_claude_opus_5_high": [
+      1,
+      4
+    ],
+    "grok-4-6 | xhigh | mini_swe_agent_grok_4_6_xhigh": [
+      2,
+      4
+    ],
+    "claude-sonnet-5 | max | mini_swe_agent_claude_sonnet_5_max": [
+      0,
+      4
+    ],
+    "gemini-3-6-flash | high | mini_swe_agent_gemini_3_6_flash_high": [
+      0,
+      4
+    ],
+    "claude-opus-5 | medium | mini_swe_agent_claude_opus_5_medium": [
+      1,
+      4
+    ],
+    "claude-fable-5 | high | mini_swe_agent_claude_fable_5_high": [
+      0,
+      4
+    ],
+    "claude-opus-4-8 | xhigh | mini_swe_agent_claude_opus_4_8_xhigh": [
+      0,
+      4
+    ],
+    "claude-opus-5 | low | mini_swe_agent_claude_opus_5_low": [
+      0,
+      4
+    ],
+    "gpt-5-6-terra | medium | mini_swe_agent_gpt_5_6_terra_medium": [
+      0,
+      4
+    ],
+    "gpt-5-6-sol | low | mini_swe_agent_gpt_5_6_sol_low": [
+      0,
+      4
+    ],
+    "gpt-5-6-sol | high | mini_swe_agent_gpt_5_6_sol_high": [
+      2,
+      4
+    ],
+    "gpt-6-astra | medium | mini_swe_agent_gpt_6_astra_medium": [
+      1,
+      4
+    ],
+    "glm-5-2 | max | mini_swe_agent_glm_5_2_max": [
+      1,
+      4
+    ],
+    "glm-5-3-flash | max | mini_swe_agent_glm_5_3_flash_max": [
+      3,
+      4
+    ],
+    "gpt-5-6-sol | max | mini_swe_agent_gpt_5_6_sol_max": [
+      2,
+      4
+    ],
+    "grok-4-6 | medium | mini_swe_agent_grok_4_6_medium": [
+      0,
+      4
+    ],
+    "gpt-5-6-terra | low | mini_swe_agent_gpt_5_6_terra_low": [
+      0,
+      4
+    ],
+    "gemini-3-5-flash | high | mini_swe_agent_gemini_3_5_flash_high": [
+      0,
+      4
+    ],
+    "claude-fable-5 | low | mini_swe_agent_claude_fable_5_low": [
+      0,
+      4
+    ],
+    "gpt-5-6-luna | max | mini_swe_agent_gpt_5_6_luna_max": [
+      1,
+      4
+    ],
+    "claude-opus-4-8 | low | mini_swe_agent_claude_opus_4_8_low": [
+      0,
+      4
+    ],
+    "gemini-3-7-flash | low | mini_swe_agent_gemini_3_7_flash_low": [
+      0,
+      4
+    ],
+    "grok-4-5 | high | mini_swe_agent_grok_4_5_high": [
+      0,
+      4
+    ],
+    "muse-spark-1-1 | xhigh | mini_swe_agent_muse_spark_1_1_xhigh": [
+      0,
+      4
+    ],
+    "gpt-6-astra | high | mini_swe_agent_gpt_6_astra_high": [
+      1,
+      4
+    ],
+    "gpt-5-6-terra | xhigh | mini_swe_agent_gpt_5_6_terra_xhigh": [
+      1,
+      4
+    ],
+    "muse-spark-1-2 | xhigh | mini_swe_agent_muse_spark_1_2_xhigh": [
+      1,
+      4
+    ],
+    "qwen3-8-max | xhigh | mini_swe_agent_qwen3_8_max_xhigh": [
+      2,
+      4
+    ],
+    "grok-4-6 | low | mini_swe_agent_grok_4_6_low": [
+      0,
+      4
+    ],
+    "gpt-5-6-terra | high | mini_swe_agent_gpt_5_6_terra_high": [
+      0,
+      4
+    ],
+    "deepseek-v4-pro | max | mini_swe_agent_deepseek_v4_pro_max": [
+      1,
+      4
+    ],
+    "gpt-5-4 | xhigh | mini_swe_agent_gpt_5_4_xhigh": [
+      2,
+      4
+    ],
+    "claude-sonnet-4-6 | high | mini_swe_agent_claude_sonnet_4_6_high": [
+      0,
+      4
+    ],
+    "claude-fable-5 | max | mini_swe_agent_claude_fable_5_max": [
+      1,
+      4
+    ],
+    "claude-opus-5 | max | mini_swe_agent_claude_opus_5_max": [
+      2,
+      4
+    ],
+    "gemini-3-7-flash | medium | mini_swe_agent_gemini_3_7_flash_medium": [
+      0,
+      4
+    ],
+    "deepseek-v4-flash | max | mini_swe_agent_deepseek_v4_flash_max": [
+      1,
+      4
+    ],
+    "glm-5-3 | max | mini_swe_agent_glm_5_3_max": [
+      0,
+      4
+    ],
+    "gpt-5-6-luna | low | mini_swe_agent_gpt_5_6_luna_low": [
+      0,
+      4
+    ],
+    "gemini-3-7-flash | high | mini_swe_agent_gemini_3_7_flash_high": [
+      0,
+      4
+    ],
+    "claude-sonnet-5 | high | mini_swe_agent_claude_sonnet_5_high": [
+      1,
+      4
+    ],
+    "gemini-3-8-flash | high | mini_swe_agent_gemini_3_8_flash_high": [
+      1,
+      4
+    ],
+    "gpt-5-6-sol | medium | mini_swe_agent_gpt_5_6_sol_medium": [
+      2,
+      4
+    ],
+    "gpt-5-5 | high | mini_swe_agent_gpt_5_5_high": [
+      1,
+      4
+    ],
+    "claude-opus-4-8 | medium | mini_swe_agent_claude_opus_4_8_medium": [
+      0,
+      4
+    ],
+    "grok-4-6 | high | mini_swe_agent_grok_4_6_high": [
+      0,
+      4
+    ],
+    "claude-opus-5 | xhigh | mini_swe_agent_claude_opus_5_xhigh": [
+      3,
+      4
+    ],
+    "claude-fable-5 | medium | mini_swe_agent_claude_fable_5_medium": [
+      0,
+      4
+    ],
+    "claude-sonnet-5 | xhigh | mini_swe_agent_claude_sonnet_5_xhigh": [
+      0,
+      4
+    ],
+    "gpt-5-6-luna | xhigh | mini_swe_agent_gpt_5_6_luna_xhigh": [
+      0,
+      4
+    ],
+    "gpt-5-6-luna | medium | mini_swe_agent_gpt_5_6_luna_medium": [
+      0,
+      4
+    ],
+    "gpt-6-astra | low | mini_swe_agent_gpt_6_astra_low": [
+      2,
+      4
+    ],
+    "claude-fable-5 | xhigh | mini_swe_agent_claude_fable_5_xhigh": [
+      2,
+      4
+    ],
+    "kimi-k3 | max | mini_swe_agent_kimi_k3_max": [
+      0,
+      4
+    ],
+    "claude-opus-4-8 | high | mini_swe_agent_claude_opus_4_8_high": [
+      1,
+      4
+    ]
+  },
+  "fits": {
+    "all_configurations": {
+      "predicted_new_flash": {
+        "standard_anchor": 0.3031062453471524,
+        "miniswe_anchor": 0.35622157961404016
+      },
+      "task_difficulty_logit": 1.8590989161488427,
+      "difficulty_rank": 6
+    },
+    "highest_reasoning_per_model": {
+      "predicted_new_flash": {
+        "standard_anchor": 0.3435030625922529,
+        "miniswe_anchor": 0.39895179278896337
+      },
+      "task_difficulty_logit": 1.6897423607478819,
+      "difficulty_rank": 7
+    },
+    "family_balanced": {
+      "predicted_new_flash": {
+        "standard_anchor": 0.3200859979257364,
+        "miniswe_anchor": 0.3735788472630598
+      },
+      "task_difficulty_logit": 1.7729741677579745,
+      "difficulty_rank": 6
+    },
+    "leave_out_gpt": {
+      "predicted_new_flash": {
+        "standard_anchor": 0.3085959675209941,
+        "miniswe_anchor": 0.36120605218837953
+      },
+      "task_difficulty_logit": 1.839891728334052,
+      "difficulty_rank": 6
+    },
+    "leave_out_claude": {
+      "predicted_new_flash": {
+        "standard_anchor": 0.32914292992587657,
+        "miniswe_anchor": 0.3835068893723702
+      },
+      "task_difficulty_logit": 1.765691676388125,
+      "difficulty_rank": 7
+    },
+    "leave_out_deepseek": {
+      "predicted_new_flash": {
+        "standard_anchor": 0.30910024895211974,
+        "miniswe_anchor": 0.3616442699469322
+      },
+      "task_difficulty_logit": 1.8278376546237334,
+      "difficulty_rank": 6
+    }
+  },
+  "highest_reasoning_selected_passes": 25,
+  "highest_reasoning_selected_trials": 112,
+  "assumptions": "1PL with L2=0.25; aggregate anchors are cross-harness heuristics, not same-harness calibration. Family weighting/leave-out are sensitivity analyses. No confidence interval or strict capability ceiling is claimed."
+}

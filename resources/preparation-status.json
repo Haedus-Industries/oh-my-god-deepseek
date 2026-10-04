@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-03T19:38:47.131377+00:00",
+  "scope": "local unpaid preparation",
+  "budget": {
+    "seed": 20261004,
+    "model": "deepseek-flash",
+    "reasoning_effort": "max",
+    "context_tokens": 1000000,
+    "reservation_input_tokens": 1048576,
+    "max_tokens": 256000,
+    "total_budget_cny": 200,
+    "api_budget_cny": 160,
+    "environment_and_margin_cny": 40,
+    "trial_budget_cny": 20,
+    "usd_cny": 7.3,
+    "concurrency": 2,
+    "agent_seconds": 10800,
+    "verifier_seconds": 1800,
+    "execution_seconds": 86400,
+    "infrastructure_replacements": 2,
+    "price_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+    "upstream": "https://api.deepseek.com/chat/completions"
+  },
+  "offline_tests": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 59.617,
+    "junit": "outputs/pytest-release.xml"
+  },
+  "native_mock": {
+    "arms": 4,
+    "requests": 16,
+    "persistent_state_proof": true,
+    "platform": "Windows/pwsh"
+  },
+  "paid_api_calls": 0,
+  "cloud_ready": false,
+  "pending": [
+    "Linux Docker capacity and image digest",
+    "Linux native and container Unix-relay mock checks",
+    "unmodified base fails / official oracle passes",
+    "runtime API key and short-reply paid protocol check",
+    "eight primary runs and conditional thirds"
+  ],
+  "history_sha256": "310cb428fe8914cff21b8edcb0b17256884efca55666bd6d6646d223c77d2ce6"
+}
