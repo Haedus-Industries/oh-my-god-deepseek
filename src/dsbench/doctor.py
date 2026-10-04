@@ -9,6 +9,13 @@ from .resources import verify_resources
 
 
 MIN_FREE_DISK_GIB = 20
+MIN_RAM_GIB = 16
+
+
+def capacity_ok(cpus, ram_bytes, free_bytes):
+    return (cpus >= 4
+            and ram_bytes >= MIN_RAM_GIB * 1024**3
+            and free_bytes >= MIN_FREE_DISK_GIB * 1024**3)
 
 
 def fingerprint():
@@ -50,9 +57,10 @@ async def doctor(*, runtime=False, containers=False):
     if docker_capacity:
         cpus = min(cpus, docker_capacity["NCPU"])
         ram = min(ram, docker_capacity["MemTotal"])
-    checks["capacity"] = {"ok": cpus >= 4 and ram >= 20 * 1024**3 and free >= MIN_FREE_DISK_GIB * 1024**3,
+    checks["capacity"] = {"ok": capacity_ok(cpus, ram, free),
                           "cpus": cpus, "ram_gib": ram / 1024**3 if platform.system() == "Linux" else None,
-                          "free_gib": free / 1024**3, "required_free_gib": MIN_FREE_DISK_GIB}
+                          "free_gib": free / 1024**3, "required_ram_gib": MIN_RAM_GIB,
+                          "required_free_gib": MIN_FREE_DISK_GIB}
     if runtime:
         checks["runtime_key"] = {"ok": bool(os.environ.get("DEEPSEEK_API_KEY")), "detail": "presence only; value is never persisted"}
         try:
@@ -68,8 +76,14 @@ async def doctor(*, runtime=False, containers=False):
         stamp = now().replace(":", "-")
         out = ROOT / "outputs/preflight" / stamp
         try:
-            base = await run_trial(out, "base", control="base")
-            oracle = await run_trial(out, "oracle", control="oracle")
+            # Exercise the same two-slot resource shape as the paid schedule.
+            # Docker memory values are per-container ceilings, not reservations;
+            # running both controls together verifies that the host can sustain
+            # two real task environments before any model request is allowed.
+            base, oracle = await asyncio.gather(
+                run_trial(out, "base", control="base"),
+                run_trial(out, "oracle", control="oracle"),
+            )
             base_reward = (base.get("verifier_result") or {}).get("rewards", {}).get("reward")
             oracle_reward = (oracle.get("verifier_result") or {}).get("rewards", {}).get("reward")
             ok = base_reward == 0 and oracle_reward == 1 and not base.get("exception_info") and not oracle.get("exception_info")

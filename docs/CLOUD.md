@@ -2,7 +2,7 @@
 
 ## 条件
 
-Linux x86_64；Docker daemon 和 `docker compose` 可用；至少 4 vCPU、20 GiB 可用内存、20 GiB 可用磁盘。磁盘值是允许进入无付费容器预检的保守门槛，不是实验峰值的精确上界；运行期间仍应保留并监控剩余空间。`doctor` 同时考虑 Linux cgroup CPU/内存限制。两个任务环境各限制 2 CPU／8 GiB，verifier 也保留官方配额。如果 Cloud 环境无法提供 Docker 或配额，不要进入付费实验，应更换支持 Docker 的执行环境。
+Linux x86_64；Docker daemon 和 `docker compose` 可用；至少 4 vCPU、16 GiB 可用内存、20 GiB 可用磁盘。磁盘值只是允许进入无付费容器预检的门槛，不保证所有 Docker 存储驱动都能解包大型固定镜像；运行期间仍应保留并监控剩余空间。`doctor` 同时考虑 Linux cgroup CPU/内存限制。最多两个并发任务环境各限制 2 CPU／8 GiB；这些是容器上限而非内存预留，agent 与 verifier 在每个 trial 内阶段化运行，不额外要求四个环境同时常驻。容器预检会并发运行 base 与 oracle 两个真实 SWE 控制任务，验证 16 GiB 主机能承载正式调度的双槽资源形状。如果 Cloud 环境无法通过该并发控制、Docker 或磁盘检查，不要进入付费实验，应更换执行环境。
 
 Cloud setup 阶段运行 `bash scripts/cloud-setup.sh`。该阶段只安装 `uv.lock` 中的依赖、拉取固定仓库和镜像、记录镜像 digest、安装与容器 Python ABI 匹配的 worker 依赖并校验全部文件哈希。
 
