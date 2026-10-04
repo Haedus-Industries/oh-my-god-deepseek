@@ -56,8 +56,8 @@ def main():
             {"type": "tool/result", "time": int((instant+timedelta(seconds=2)).timestamp()*1000), "data": {"message": {"source": {"callId": "probe-call"}, "content": [{"text": "模拟工具输出，不是正式实验。 <script>window.hacked=1</script>"}]}}},
         ]
         (agent / "notifications.jsonl").write_text("".join(canonical({"payload": {"event": e}})+"\n" for e in events), encoding="utf-8")
-        # A known credential in a whitelisted local log verifies live redaction.
-        (agent / "worker.stdout").write_text("Bearer " + token + "\n模拟日志\n", encoding="utf-8")
+        # Synthetic header text verifies redaction without persisting credentials.
+        (agent / "worker.stdout").write_text("Bearer probe-only-synthetic-value\n模拟日志\n", encoding="utf-8")
         write_json(agent / "worker.json", {"simulation": True, "paid_api_calls": 0})
     write_json(output / "state.json", {"simulation": True, "execution_started_at": at(0), "finished_at": at(3), "end_reason": "completed", "attempts": attempts, "results": {}, "replacements": 0})
     phase = "upload"
@@ -111,7 +111,7 @@ def main():
         for artifact in artifacts:
             body = session.get(url+"/api/v1/download", params={"experiment": experiment, "stream": artifact["stream"]}, timeout=(2, 3))
             body.raise_for_status()
-            assert token not in body.text
+            assert token not in body.text and "probe-only-synthetic-value" not in body.text
         phase = "restore"
         restored = Publisher(output, url, token, experiment_id=experiment)
         restored.cycle()
