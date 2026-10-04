@@ -414,16 +414,21 @@ class Publisher:
 
 def doctor_dashboard(url, token):
     url = validate_url(url)
-    with requests.Session() as session:
-        if urlparse(url).hostname in ("localhost", "127.0.0.1"):
-            session.trust_env = False
-        response = session.get(url + "/api/v1/health", timeout=(2, 3), verify=ssl_verify(), allow_redirects=False)
-        response.raise_for_status()
-        public = response.json()
-        response = session.post(url + "/api/v1/check", json={"schema_version": SCHEMA}, headers={"Authorization": "Bearer " + token}, timeout=(2, 3), verify=ssl_verify(), allow_redirects=False)
-        response.raise_for_status()
-        private = response.json()
+    async def check():
+        import ssl
+        from aiohttp import ClientSession, ClientTimeout
+        verify = ssl_verify()
+        context = ssl.create_default_context(cafile=verify if isinstance(verify, str) else None)
+        trust_env = urlparse(url).hostname not in ("localhost", "127.0.0.1")
+        async with ClientSession(trust_env=trust_env, timeout=ClientTimeout(total=5)) as session:
+            async with session.get(url + "/api/v1/health", ssl=context, allow_redirects=False) as response:
+                response.raise_for_status()
+                public = await response.json()
+            async with session.post(url + "/api/v1/check", json={"schema_version": SCHEMA}, headers={"Authorization": "Bearer " + token}, ssl=context, allow_redirects=False) as response:
+                response.raise_for_status()
+                private = await response.json()
         return {"ok": public.get("schema_version") == SCHEMA and private.get("ok") is True, "schema_version": SCHEMA, "experiment_id": private.get("experiment_id"), "paid_api_calls": 0}
+    return asyncio.run(check())
 
 
 def sync_dashboard(output, url, token):

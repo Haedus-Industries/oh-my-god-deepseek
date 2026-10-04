@@ -7,7 +7,7 @@ from pathlib import Path
 
 import requests
 from dsbench.common import write_json
-from dsbench.telemetry import Publisher, canonical, doctor_dashboard, sync_dashboard, ssl_verify
+from dsbench.telemetry import Publisher, canonical, doctor_dashboard, ssl_verify
 
 phase = "startup"
 
@@ -16,6 +16,18 @@ def main():
     config = json.loads(sys.stdin.readline())
     url, token = config["url"], config["token"]
     output = Path(config.get("output", "outputs/dashboard-live-probe"))
+    if config.get("mode") == "revoked":
+        from aiohttp import ClientResponseError
+        phase = "revocation"
+        try:
+            doctor_dashboard(url, token)
+        except ClientResponseError as error:
+            assert error.status == 401
+            summary = {"ok": True, "verification_token_revoked": True, "public_health": True, "status": 401, "paid_api_calls": 0}
+            write_json(output / "revocation.json", summary)
+            print(canonical(summary))
+            return
+        raise AssertionError("verification authorization still active")
     phase = "doctor"
     for retry in range(3):
         try:

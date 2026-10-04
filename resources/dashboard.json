@@ -3,11 +3,11 @@
   "public": true,
   "url": "https://deepseek-prompt-lab.javavirtualenv.chatgpt.site",
   "project_id": "appgprj_6ac1b4fe606c81918b2290f4ce280229",
-  "site_version": 2,
-  "version_id": "appgprj_6ac1b4fe606c81918b2290f4ce280229~appgver_213135caa684819185ac4f3e3405350b",
-  "deployment_id": "appgdep_6ac1c4bba55c819187351ce90b5023d7",
-  "site_source_commit": "1781713de50071be43af0fa0d685a1465c84ef9a",
-  "archive_sha256": "sha256:c3c6bdd0ae1f56c2818db5e1d90e949183236215c3aa847dcfee9f03d96696e0",
+  "site_version": 3,
+  "version_id": "appgprj_6ac1b4fe606c81918b2290f4ce280229~appgver_96364abcc430819184417454477dfb78",
+  "deployment_id": "appgdep_6ac1c85468c881918004746bca0b5997",
+  "site_source_commit": "6526381daaddb0d752d4adbd754be850ee3e36f6",
+  "archive_sha256": "sha256:c27f21a03bc0e863be6e75aaf47df89b339b42442cbe0e2275eb68965fc261ea",
   "api_budget_cny": 160,
   "total_budget_cny": 200,
   "paid_api_calls": 0,
@@ -19,7 +19,9 @@
     "desktop": true,
     "mobile": true,
     "independent_review": true,
-    "live_probe": "in_progress"
+    "live_probe": "passed"
   },
-  "cloud_ready": false
+  "cloud_ready": false,
+  "env_revision": 2,
+  "verification_token_revoked": true
 }

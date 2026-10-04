@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "python_suite": {
+    "passed": 31,
+    "junit": "outputs/pytest-dashboard-revised.xml"
+  },
+  "upload_after_timeout_change": {
+    "passed": 10,
+    "junit": "outputs/pytest-upload-timeout.xml"
+  },
+  "worker_and_activity": {
+    "tests": [
+      {
+        "name": "public reads and experiment-scoped auth",
+        "passed": true
+      },
+      {
+        "name": "new state never replaced by older state",
+        "passed": true
+      },
+      {
+        "name": "duplicate chunks safe; conflicting content rejected",
+        "passed": true
+      },
+      {
+        "name": "late out-of-order data remains reachable by cursor",
+        "passed": true
+      },
+      {
+        "name": "large UTF8 log complete through paging and download",
+        "passed": true
+      },
+      {
+        "name": "oversized data and forged hash rejected",
+        "passed": true
+      },
+      {
+        "name": "model markup remains inert text",
+        "passed": true
+      },
+      {
+        "name": "concurrent conflicts cannot corrupt stored content",
+        "passed": true
+      },
+      {
+        "name": "historical page boundary survives new arrivals",
+        "passed": true
+      },
+      {
+        "name": "activity follows source time and pairs tools with output",
+        "passed": true
+      },
+      {
+        "name": "fragmented tool output reconstructs complete text",
+        "passed": true
+      }
+    ],
+    "passed": 11,
+    "elapsed_ms": 3477
+  },
+  "desktop": true,
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "page_overflow": false
+  },
+  "independent_review": {
+    "rounds": 2,
+    "main_findings_fixed": true
+  },
+  "paid_api_calls": 0
+}

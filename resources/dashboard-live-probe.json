@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "url": "https://deepseek-prompt-lab.javavirtualenv.chatgpt.site",
+  "experiment_id": "a3610e216e7e85c38c9dc8b28ab0c865",
+  "simulation": true,
+  "public_read": true,
+  "unauthorized_write_status": 401,
+  "activity_records": 28,
+  "artifacts": 24,
+  "utf8_full_download": true,
+  "credential_redaction": true,
+  "resume_pending_chunks": 0,
+  "paid_api_calls": 0,
+  "checked_at": "2026-10-04T03:20:59.484626+00:00"
+}
